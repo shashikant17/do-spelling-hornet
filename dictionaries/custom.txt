@@ -3,3 +3,5 @@ klamp
 samsung
 weild
 couleur
+firki
+helpdesk
