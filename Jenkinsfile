@@ -15,6 +15,7 @@ pipeline {
                                 submoduleCfg                     : [],
                                 userRemoteConfigs                : [[credentialsId: 'do-git', url: 'git@bitbucket.org:daily-objects/do-spelling-hornet.git']]]
                 )
+                sh 'pip install -r requirements.txt'
                 sh 'python main.py'
                 upload_to_folder('content', 'misspelled_words.csv')
             }
