@@ -37,7 +37,7 @@ def get_urls_for_checking() -> list:
 
 
 def write_results_to_csv(result: list) -> None:
-    with open('spelling_errors.csv', 'w', newline='') as csv:
+    with open('misspelled_words.csv', 'w', newline=' ') as csv:
         file = writer(csv)
         file.writerows(result)
 
