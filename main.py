@@ -1,4 +1,4 @@
-from pprint import pprint
+from csv import writer
 
 import untangle
 
@@ -21,24 +21,42 @@ def find_unknown_words(url):
         if len(unknowns) == 0:
             continue
 
-        unknown_words.add(
+        unknown_words = unknown_words.union(
             unknowns
         )
 
     return unknown_words
 
 
-if __name__ == '__main__':
-    sitemap_important = untangle.parse("https://www.dailyobjects.com/sitemap_important.xml")
-    total_urls = len(sitemap_important.urlset.url)
-    print('Spell Checking {0} urls'.format(total_urls))
-    urls = [sitemap_important.urlset.url[index].loc.cdata for index in range(0, total_urls)]
-    urls = [
-        "https://www.dailyobjects.com/dailyobjects-binge-watch-stride-clear-case-cover-for-iphone-12/dp?f=pid~STRD-CLR-BING-WATC-DOB-AP-IPH12"]
+def get_urls_for_checking() -> list:
+    sitemap_listing = untangle.parse("https://www.dailyobjects.com/sitemap_important.xml")
+    total_listing_urls = len(sitemap_listing.urlset.url)
+    # sitemap_products_others = untangle.parse("https://www.dailyobjects.com/sitemap_products_others.xml")
+    # urls.append([sitemap_products_others.urlset.url[index].loc.cdata for index in range(0, total_listing_urls)])
+    return [sitemap_listing.urlset.url[index].loc.cdata for index in range(0, total_listing_urls)]
+
+
+def write_results_to_csv(result: list) -> None:
+    with open('spelling_errors.csv', 'w', newline='') as csv:
+        file = writer(csv)
+        file.writerows(result)
+
+
+def main():
+    result = [["url", "misspelled*"]]
+    urls = get_urls_for_checking()
+    print('Spell Checking {0} urls'.format(len(urls)))
     current_url_index = 0
     for url in urls:
-        print('Checking {0} : {1}'.format(current_url_index, url))
         words = find_unknown_words(url)
-        pprint(words)
+        unknowns = " ".join(list(words))
+        result.append([url, unknowns])
         current_url_index += 1
-        break
+        print('Check for #{0} {1} : {2}'.format(current_url_index, url, unknowns))
+        if current_url_index > 5:
+            break
+    write_results_to_csv(result)
+
+
+if __name__ == '__main__':
+    main()
