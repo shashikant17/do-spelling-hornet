@@ -53,8 +53,6 @@ def main():
         result.append([url, unknowns])
         current_url_index += 1
         print('Check for #{0} {1} : {2}'.format(current_url_index, url, unknowns))
-        if current_url_index > 5:
-            break
     write_results_to_csv(result)
 
 
