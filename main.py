@@ -24,6 +24,7 @@ def find_unknown_words(url):
         unknown_words.add(
             unknowns
         )
+
     return unknown_words
 
 
@@ -31,10 +32,13 @@ if __name__ == '__main__':
     sitemap_important = untangle.parse("https://www.dailyobjects.com/sitemap_important.xml")
     total_urls = len(sitemap_important.urlset.url)
     print('Spell Checking {0} urls'.format(total_urls))
+    urls = [sitemap_important.urlset.url[index].loc.cdata for index in range(0, total_urls)]
+    urls = [
+        "https://www.dailyobjects.com/dailyobjects-binge-watch-stride-clear-case-cover-for-iphone-12/dp?f=pid~STRD-CLR-BING-WATC-DOB-AP-IPH12"]
     current_url_index = 0
-    while current_url_index < 2:
-        current_url = sitemap_important.urlset.url[current_url_index].loc.cdata
-        print('Checking {0} : {1}'.format(current_url_index, current_url))
-        words = find_unknown_words(current_url)
+    for url in urls:
+        print('Checking {0} : {1}'.format(current_url_index, url))
+        words = find_unknown_words(url)
         pprint(words)
         current_url_index += 1
+        break

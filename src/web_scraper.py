@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-IGNORE_CHARS = ['\n', ',', '*', '?', '!', '.', '/', '-', ';', ':']
+IGNORE_CHARS = ['\n', ',', '*', '?', '!', '.', '/', '-', ';', ':', '+', '(', ')']
 
 
 class WebScraper:
@@ -19,6 +19,7 @@ class WebScraper:
         )
         soup = BeautifulSoup(response.text.strip(), 'html.parser')
         # noinspection PyArgumentList
+
         html_text = soup.get_text(separator='|', strip=True)
         for ch in IGNORE_CHARS:
             html_text = html_text.replace(ch, " ")
