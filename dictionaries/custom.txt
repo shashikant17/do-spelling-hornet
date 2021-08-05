@@ -5,3 +5,18 @@ weild
 couleur
 firki
 helpdesk
+Amazon
+Apple
+DailyObjects
+Lenovo
+OnePlus
+Google
+Apple Watch
+Oppo
+Motorola
+Xiaomi
+Samsung
+Vivo
+redmi
+iphone12
+garmin
