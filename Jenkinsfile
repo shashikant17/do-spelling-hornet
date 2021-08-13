@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    options { timeout(time: 180, unit: 'MINUTES') }
+    options { timeout(time: 300, unit: 'MINUTES') }
     triggers { cron('H 22 * * *') }
     stages {
         stage('Find Misspelled Words on Website') {
