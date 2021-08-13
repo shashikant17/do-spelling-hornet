@@ -1,7 +1,7 @@
 pipeline {
     agent any
-    options { timeout(time: 45, unit: 'MINUTES') }
-    triggers { cron('H 06 * * *') }
+    options { timeout(time: 180, unit: 'MINUTES') }
+    triggers { cron('H 22 * * *') }
     stages {
         stage('Find Misspelled Words on Website') {
             agent { docker { image 'python:3.9-alpine3.13' } }
@@ -16,7 +16,7 @@ pipeline {
                                 userRemoteConfigs                : [[credentialsId: 'do-git', url: 'git@bitbucket.org:daily-objects/do-spelling-hornet.git']]]
                 )
                 sh 'pip install -r requirements.txt'
-                sh 'python main.py'
+                sh 'python main.py sitemap_important.xml sitemap_other.xml sitemap_other_products.xml'
                 upload_to_folder('content', 'misspelled_words.csv')
             }
         }

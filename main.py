@@ -1,3 +1,5 @@
+import sys
+import time
 from csv import writer
 
 import untangle
@@ -28,11 +30,9 @@ def find_unknown_words(url):
     return unknown_words
 
 
-def get_urls_for_checking() -> list:
-    sitemap_listing = untangle.parse("https://www.dailyobjects.com/sitemap_important.xml")
+def get_urls_for_checking(sitemap: str) -> list:
+    sitemap_listing = untangle.parse(sitemap)
     total_listing_urls = len(sitemap_listing.urlset.url)
-    # sitemap_products_others = untangle.parse("https://www.dailyobjects.com/sitemap_products_others.xml")
-    # urls.append([sitemap_products_others.urlset.url[index].loc.cdata for index in range(0, total_listing_urls)])
     return [sitemap_listing.urlset.url[index].loc.cdata for index in range(0, total_listing_urls)]
 
 
@@ -44,15 +44,25 @@ def write_results_to_csv(result: list) -> None:
 
 def main():
     result = [["url", "misspelled*"]]
-    urls = get_urls_for_checking()
+    urls = []
+    for i in range(1, len(sys.argv)):
+        urls.extend(get_urls_for_checking('https://www.dailyobjects.com/{0}'.format(sys.argv[i])))
     print('Spell Checking {0} urls'.format(len(urls)))
     current_url_index = 0
     for url in urls:
-        words = find_unknown_words(url)
-        unknowns = " ".join(list(words))
-        result.append([url, unknowns])
-        current_url_index += 1
-        print('Check for #{0} {1} : {2}'.format(current_url_index, url, unknowns))
+        try:
+            start_time = time.time()
+            words = find_unknown_words(url)
+            unknowns = " ".join(list(words))
+            result.append([url, unknowns])
+            current_url_index += 1
+            print(
+                'Check for #{0} {1} : {2} in {3}ms'.format(current_url_index, url.split(".com")[1],
+                                                           unknowns,
+                                                           round((time.time() - start_time) * 1000),
+                                                           2))
+        except ConnectionError:
+            print('Error Checking for #{0} {1}'.format(current_url_index, url))
     write_results_to_csv(result)
 
 
