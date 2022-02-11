@@ -1,7 +1,7 @@
 pipeline {
     agent any
     options { timeout(time: 120, unit: 'MINUTES') }
-    triggers { cron('H 09 * * *') }
+    triggers { cron('H 13 * * 1,3,5') }
     stages {
         stage('Find Misspelled Words on Website') {
             agent { docker { image 'python:3.9-alpine3.13' } }
