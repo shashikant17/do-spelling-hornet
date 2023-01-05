@@ -1,5 +1,6 @@
 import sys
 import time
+import datetime
 from csv import writer
 
 import untangle
@@ -7,6 +8,10 @@ import untangle
 from src.spell_checker import SpellChecker
 from src.web_scraper import WebScraper
 
+# get day of the week
+now = datetime.datetime.now()
+print(now.strftime("%A"))
+day = now.strftime("%A")
 
 def find_unknown_words(url):
     scraper = WebScraper()
@@ -45,10 +50,60 @@ def write_results_to_csv(result: list) -> None:
 def main():
     result = [["url", "misspelled*"]]
     urls = []
-    for i in range(1, len(sys.argv)):
-        urls.extend(get_urls_for_checking('https://www.dailyobjects.com/{0}'.format(sys.argv[i])))
+    # urls = ["sitemap_important.xml",
+    #         "sitemap_other.xml",
+    #         "sitemap_other_products.xml",
+    #         "sitemap_apple_cases_products.xml",
+    #         "sitemap_android_oneplue_cases_products.xml",
+    #         "sitemap_android_samsung_cases_products.xml",
+    #         "sitemap_android_other_cases_products.xml"]
+
+    mtURL = ["sitemap_important.xml",
+            "sitemap_other.xml",
+            "sitemap_other_products.xml"
+    ]
+
+    wtURl = [
+        "sitemap_apple_cases_products.xml",
+        "sitemap_android_oneplue_cases_products.xml",
+    ]
+
+    fsURL = [
+            "sitemap_android_samsung_cases_products.xml",
+            "sitemap_android_other_cases_products.xml"
+    ]
+            
+    todayURL = []
+
+    if day == "Monday":
+        print(day)
+        todayURL = mtURL
+    elif day == "Tuesday":
+        print(day)
+        todayURL = mtURL
+    elif day == "Wednesday":
+        print(day)
+        todayURL = wtURl
+    elif day == "Thursday":
+        print(day)
+        todayURL = wtURl
+    elif day == "Friday":
+        print(day)
+        todayURL = fsURL
+    elif day == "Saturday":
+        print(day)
+        todayURL = fsURL
+
+    
+    # for i in range(1, len(sys.argv)):
+    #     urls.extend(get_urls_for_checking('https://www.dailyobjects.com/{0}'.format(sys.argv[i])))
+
+    for i in range(0, len(todayURL)):
+        urls.extend(get_urls_for_checking('https://www.dailyobjects.com/{0}'.format(todayURL[i])))
+    
     print('Spell Checking {0} urls'.format(len(urls)))
     current_url_index = 0
+
     for url in urls:
         try:
             start_time = time.time()
