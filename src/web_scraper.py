@@ -1,6 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
-from main import todayDateIndex
+
+import datetime
+
+now = datetime.datetime.now()
+todayDate = now.strftime("%d")
+todayDateIndex = int(todayDate) % 10 # get index value of date
 
 IGNORE_CHARS = ['\n', ',', '*', '?', '!', '.', '/', '-', ';', ':', '+', '(', ')']
 

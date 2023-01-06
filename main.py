@@ -10,11 +10,12 @@ from src.web_scraper import WebScraper
 
 # Get date of the month
 now = datetime.datetime.now()
-print(now.strftime("%A"))
-day = now.strftime("%A")
 
 # todays date
 todayDate = now.strftime("%d")
+print(todayDate)
+
+todayDateIndex = int(todayDate) % 10 # get index value of date
 
 # is_odd function is for checking date is even or not
 def is_odd(num):
@@ -104,21 +105,20 @@ def main():
             
     todayURL = []
     
-    global todayDateIndex # global variable because we've to use it in web_scraper.py
-    todayDateIndex = int(todayDate) % 10 # get index value of date
+
 
     if is_odd(todayDateIndex):
-        todayURL = oddURL
+        todayURL.append(oddURL)
     elif(todayDateIndex == 0):
-        todayURL = evenURL.get("0")
+        todayURL.append(evenURL.get("0"))
     elif(todayDateIndex == 2):
-        todayURL = evenURL.get("2")
+        todayURL.append(evenURL.get("2"))
     elif(todayDateIndex == 4):
-        todayURL = evenURL.get("4")
+        todayURL.append(evenURL.get("4"))
     elif(todayDateIndex == 6):
-        todayURL = evenURL.get("6")
+        todayURL.append(evenURL.get("6"))
     elif(todayDateIndex == 8):
-        todayURL = evenURL.get("8")
+        todayURL.append(evenURL.get("8"))
 
 
     print(todayURL)
