@@ -8,10 +8,20 @@ import untangle
 from src.spell_checker import SpellChecker
 from src.web_scraper import WebScraper
 
-# get day of the week
+# Get date of the month
 now = datetime.datetime.now()
 print(now.strftime("%A"))
 day = now.strftime("%A")
+
+# todays date
+todayDate = now.strftime("%d")
+
+# is_odd function is for checking date is even or not
+def is_odd(num):
+    if num % 2 == 0:
+        return False
+    else:
+        return True
 
 def find_unknown_words(url):
     scraper = WebScraper()
@@ -50,14 +60,32 @@ def write_results_to_csv(result: list) -> None:
 def main():
     result = [["url", "misspelled*"]]
     urls = []
-    # urls = ["sitemap_important.xml",
-    #         "sitemap_other.xml",
-    #         "sitemap_other_products.xml",
-    #         "sitemap_apple_cases_products.xml",
-    #         "sitemap_android_oneplue_cases_products.xml",
-    #         "sitemap_android_samsung_cases_products.xml",
-    #         "sitemap_android_other_cases_products.xml"]
 
+    """urls = ["sitemap_important.xml",
+            "sitemap_other.xml",
+            "sitemap_other_products.xml",
+            "sitemap_apple_cases_products.xml",
+            "sitemap_android_oneplue_cases_products.xml",
+            "sitemap_android_samsung_cases_products.xml",
+            "sitemap_android_other_cases_products.xml"]
+    """
+
+    # runs on odd dates like 1,3,5,7,9
+    oddURL = [
+        "sitemap_important.xml",
+        "sitemap_other.xml",
+    ]
+
+    # runs on even dates like 2, 4, 6, 8, 10
+    evenURL = {
+        "0": "sitemap_other_products.xml",
+        "2": "sitemap_apple_cases_products.xml",
+        "4": "sitemap_android_other_cases_products.xml",
+        "6": "sitemap_android_oneplue_cases_products.xml",
+        "8": "sitemap_android_samsung_cases_products.xml"
+    }
+
+    """
     mtURL = ["sitemap_important.xml",
             "sitemap_other.xml",
             "sitemap_other_products.xml"
@@ -72,9 +100,30 @@ def main():
             "sitemap_android_samsung_cases_products.xml",
             "sitemap_android_other_cases_products.xml"
     ]
+    """
             
     todayURL = []
+    
+    global todayDateIndex # global variable because we've to use it in web_scraper.py
+    todayDateIndex = int(todayDate) % 10 # get index value of date
 
+    if is_odd(todayDateIndex):
+        todayURL = oddURL
+    elif(todayDateIndex == 0):
+        todayURL = evenURL.get("0")
+    elif(todayDateIndex == 2):
+        todayURL = evenURL.get("2")
+    elif(todayDateIndex == 4):
+        todayURL = evenURL.get("4")
+    elif(todayDateIndex == 6):
+        todayURL = evenURL.get("6")
+    elif(todayDateIndex == 8):
+        todayURL = evenURL.get("8")
+
+
+    print(todayURL)
+
+    """
     if day == "Monday":
         print(day)
         todayURL = mtURL
@@ -93,8 +142,8 @@ def main():
     elif day == "Saturday":
         print(day)
         todayURL = fsURL
+    """
 
-    
     # for i in range(1, len(sys.argv)):
     #     urls.extend(get_urls_for_checking('https://www.dailyobjects.com/{0}'.format(sys.argv[i])))
 
