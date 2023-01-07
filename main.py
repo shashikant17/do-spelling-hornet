@@ -2,7 +2,8 @@ import sys
 import time
 import datetime
 from csv import writer
-
+import os
+from upload_file_to_s3 import uploadFile
 import untangle
 
 from src.spell_checker import SpellChecker
@@ -167,7 +168,17 @@ def main():
                                                            2))
         except ConnectionError:
             print('Error Checking for #{0} {1}'.format(current_url_index, url))
+    
+    try:
+        os.remove('misspelled_words.csv')
+    except FileNotFoundError:
+        print("File not found in workspace")
+
     write_results_to_csv(result)
+
+    uploadFile(file_name='misspelled_words.csv',
+                bucket_name='do-reporting-test',
+                folder_name='content')
 
 
 if __name__ == '__main__':
