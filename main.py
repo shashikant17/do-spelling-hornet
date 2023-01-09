@@ -106,10 +106,10 @@ def main():
             
     todayURL = []
     
-
-
     if is_odd(todayDateIndex):
-        todayURL.append(oddURL)
+        for url in oddURL:
+            todayURL.append(url)
+        # todayURL.append(oddURL)
     elif(todayDateIndex == 0):
         todayURL.append(evenURL.get("0"))
     elif(todayDateIndex == 2):
